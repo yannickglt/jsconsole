@@ -423,35 +423,32 @@ function trim(s) {
   return (s||"").replace(/^\s+|\s+$/g,"");
 }
 
-var ccCache = {};
 var ccPosition = false;
 
 function getProps(cmd, filter) {
-  var surpress = {}, props = [];
+  var surpress = {}, props = [], ccCache = {};
   
-  if (!ccCache[cmd]) {
-    try {
-      // surpress alert boxes because they'll actually do something when we're looking
-      // up properties inside of the command we're running
-      surpress.alert = sandboxframe.contentWindow.alert;
-      sandboxframe.contentWindow.alert = function () {};
-      
-      // loop through all of the properties available on the command (that's evaled)
-      ccCache[cmd] = sandboxframe.contentWindow.eval('console.props(' + cmd + ')').sort();
-      
-      // return alert back to it's former self
-      delete sandboxframe.contentWindow.alert;
-    } catch (e) {
-      ccCache[cmd] = [];
-    }
+  try {
+    // surpress alert boxes because they'll actually do something when we're looking
+    // up properties inside of the command we're running
+    surpress.alert = sandboxframe.contentWindow.alert;
+    sandboxframe.contentWindow.alert = function () {};
     
-    // if the return value is undefined, then it means there's no props, so we'll 
-    // empty the code completion
-    if (ccCache[cmd][0] == 'undefined') ccOptions[cmd] = [];    
-    ccPosition = 0;
-    props = ccCache[cmd];
-  } else if (filter) {
-    // console.log('>>' + filter, cmd);
+    // loop through all of the properties available on the command (that's evaled)
+    ccCache[cmd] = sandboxframe.contentWindow.eval('console.props(' + cmd + ')').sort();
+    
+    // return alert back to it's former self
+    delete sandboxframe.contentWindow.alert;
+  } catch (e) {
+    ccCache[cmd] = [];
+  }
+  
+  // if the return value is undefined, then it means there's no props, so we'll 
+  // empty the code completion
+  if (ccCache[cmd][0] == 'undefined') ccOptions[cmd] = [];    
+  // ccPosition = 0;
+
+  if (filter) {
     for (var i = 0, p; i < ccCache[cmd].length, p = ccCache[cmd][i]; i++) {
       if (p.indexOf(filter) === 0) {
         if (p != filter) {

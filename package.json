@@ -2,10 +2,18 @@
   "name": "jsconsole",
   "version": "1.1.1",
   "author": "Remy Sharp <remy@leftlogic.com>",
-  "dependencies": {
-    "connect": "1.8.x",
+  "devDependencies": {
+    "coffee-script": "^1.9.1",
+    "connect": "~2.12.0",
+    "gulp": "^3.8.11",
+    "gulp-coffee": "~1.2.5",
+    "gulp-concat": "~2.1.7",
+    "gulp-livereload": "~0.2.0",
+    "gulp-sass": "~0.4.0",
+    "gulp-uglify": "~0.1.0",
+    "gulp-util": "~2.2.9",
+    "tiny-lr": "~0.0.5",
+    "gulp-cson": "^0.2.1",
     "node-uuid": "1.1.0"
-  },
-  "main": "server.js",
-  "private": true
+  }
 }
